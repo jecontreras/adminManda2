@@ -17,6 +17,8 @@ import { FormUsuarioComponent } from './forms/form-usuario/form-usuario.componen
 import { FormMensajesComponent } from './forms/form-mensajes/form-mensajes.component';
 import { FormMandadosComponent } from './forms/form-mandados/form-mandados.component';
 import { PerfilComponent } from './relleno/perfil/perfil.component';
+import { MandadosEmpresarialesComponent } from './components/mandados-empresariales/mandados-empresariales.component';
+import { OrdenDriversComponent } from './components/orden-drivers/orden-drivers.component';
 
 const routes: Routes = [
     {
@@ -88,6 +90,14 @@ const routes: Routes = [
           {
             path: 'mandadosform/:id',
             component: FormMandadosComponent
+          },
+          {
+            path: 'mandadosEmpresariales',
+            component: MandadosEmpresarialesComponent
+          },
+          {
+            path: 'ordenDrivers',
+            component: OrdenDriversComponent
           },
           {
             path: 'perfil',
