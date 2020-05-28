@@ -4,7 +4,8 @@ import {
   MatSnackBarModule,
   MatTabsModule,
   MatDialogModule,
-  MatButtonModule
+  MatButtonModule,
+  MatListModule
 } from '@angular/material';
 import { NgModule } from '@angular/core';
 
@@ -15,7 +16,8 @@ import { NgModule } from '@angular/core';
     MatSnackBarModule,
     MatTabsModule,
     MatDialogModule,
-    MatButtonModule
+    MatButtonModule,
+    MatListModule
   ],
   exports: [
     MatSliderModule,
@@ -23,7 +25,8 @@ import { NgModule } from '@angular/core';
     MatSnackBarModule,
     MatTabsModule,
     MatDialogModule,
-    MatButtonModule
+    MatButtonModule,
+    MatListModule
   ],
 })
 export class MyOwnCustomMaterialModule { }

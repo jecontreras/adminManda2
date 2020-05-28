@@ -1,1 +1,54 @@
-<p>orden-drivers works!</p>
+<div id="content-wrapper" class="contents">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="content-header" class="clearfix">
+                        <div class="pull-left">
+                            <ol class="breadcrumb">
+                                <li><a [routerLink]="['/dashboard/home']">Home</a></li>
+                                <li class="active"><span>Mandados Empresariales</span></li>
+                            </ol>
+                            <h1>Mandados Empresariales</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4">
+                    <mat-tab label="MANDADOS ASIGNADOS A CADA DRIVER">
+                        <div class="row">
+                            <div class="main-box clearfix">
+                                <div class="main-box-body clearfix">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 5%;"><span>Drivers</span></th>
+                                                    <th *ngFor="let item of counts2">Mandados</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of listMandados2">
+                                                    <td>
+                                                        {{ item['coductor']?.nombre }} {{ item['coductor']?.apellido }}
+                                                    </td>
+                                                    <td class="text-center colorTr" *ngFor="let key of item.mandados"
+                                                        (click)="openDialog(key, 'ver')">
+                                                        <span>{{ key.createdAt | date:'mm:ss' }}</span>
+                                                        <br>
+                                                        <span>{{ key.origentexto }}</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+        </div>
+    </div>
+</div>

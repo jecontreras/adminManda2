@@ -31,10 +31,11 @@
                                             <tbody>
                                                 <tr *ngFor="let item of listMandados">
                                                     <td>
-                                                        {{ item.usuario.nombre }}
+                                                        {{ item['usuario']?.nombre }} {{ item['usuario']?.apellido }}
                                                     </td>
-                                                    <td class="text-center colorTr" *ngFor="let key of item.mandados" (click)="openDialog(key)">
-                                                        <span>hora</span>
+                                                    <td class="text-center colorTr" *ngFor="let key of item.mandados"
+                                                        (click)="openDialog(key, 'asignar')">
+                                                        <span>{{ key.createdAt | date:'mm:ss' }}</span>
                                                         <br>
                                                         <span>{{ key.origentexto }}</span>
                                                     </td>
@@ -47,7 +48,35 @@
                         </div>
                     </mat-tab>
                     <mat-tab label="ASIGNADOS">
-
+                        <div class="row">
+                            <div class="main-box clearfix">
+                                <div class="main-box-body clearfix">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 5%;"><span>Usuarios</span></th>
+                                                    <th *ngFor="let item of counts2">Mandados</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of listMandados2">
+                                                    <td>
+                                                        {{ item['usuario']?.nombre }} {{ item['usuario']?.apellido }}
+                                                    </td>
+                                                    <td class="text-center colorTr2" *ngFor="let key of item.mandados"
+                                                        (click)="openDialog(key, 'ver')">
+                                                        <span>{{ key.createdAt | date:'mm:ss' }}</span>
+                                                        <br>
+                                                        <span>{{ key.origentexto }}</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </mat-tab>
                 </mat-tab-group>
             </div>
