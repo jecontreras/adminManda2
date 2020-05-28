@@ -82,6 +82,12 @@ export class DriveComponent implements OnInit {
      }
    }
 
+   pageEvent(ev: any) {
+    this.query.page = ev.pageIndex;
+    this.query.limit = ev.pageSize;
+    this.cargarTodos();
+  }
+
    cargarTodos() {
      this.spinner.show();
      this._usuarios.get(this.query)

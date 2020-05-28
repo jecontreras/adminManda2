@@ -68,11 +68,13 @@
               </tbody>
             </table>
             <nav aria-label="Page navigation example" *ngIf="notEmptyPost">
-              <ul class="pagination justify-content-end">
+              <mat-paginator [disabled]="loader" [length]="coint" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" (page)="pageEvent($event)">
+              </mat-paginator>
+              <!-- <ul class="pagination justify-content-end">
                 <li class="page-item">
                   <a class="page-link mouse" (click)="onScroll()" >VER MAS</a>
                 </li>
-              </ul>
+              </ul> -->
             </nav>
             <ngx-spinner bdOpacity=0.9 bdColor="" size="default" color="#581f87" type="ball-pulse-sync"
               [fullScreen]="false">

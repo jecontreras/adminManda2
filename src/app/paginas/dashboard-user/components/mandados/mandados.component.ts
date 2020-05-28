@@ -81,6 +81,12 @@ export class MandadosComponent implements OnInit {
      }
    }
 
+  pageEvent(ev: any) {
+    this.query.page = ev.pageIndex;
+    this.query.limit = ev.pageSize;
+    this.cargarTodos();
+  }
+
    cargarTodos() {
      this.spinner.show();
      this._mandados.get(this.query)
