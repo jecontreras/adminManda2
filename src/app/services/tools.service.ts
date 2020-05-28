@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
 import Swal from 'sweetalert2'
 
 @Injectable({
@@ -10,7 +10,8 @@ export class ToolsService {
   loading:any;
 
   constructor(
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog,
   ) { }
  
   async presentToast(mensaje:string, type='completado') {
@@ -86,6 +87,21 @@ export class ToolsService {
         console.log('I was closed by the timer')
       }
     })
+  }
+
+  async openDialog( Components, obj, style:any = {} ){
+    return new Promise(resolve=>{
+      const dialogRef = this.dialog.open(Components,{
+        data: {datos: obj || {}},
+        height: style.height || '400px',
+        width: style.width || '600px',
+      });
+      resolve( dialogRef );
+    });
+
+    // dialogRef.afterClosed().subscribe(result => {
+    //   console.log(`Dialog result: ${result}`);
+    // });
   }
   
 

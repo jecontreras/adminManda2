@@ -30,11 +30,16 @@ import { FormMandadosComponent } from './forms/form-mandados/form-mandados.compo
 import { PerfilComponent } from './relleno/perfil/perfil.component';
 import { MandadosEmpresarialesComponent } from './components/mandados-empresariales/mandados-empresariales.component';
 import { OrdenDriversComponent } from './components/orden-drivers/orden-drivers.component';
+import { MyOwnCustomMaterialModule } from 'src/app/app.material.module';
+import { FormDetallemandadosComponent } from './forms/form-detallemandados/form-detallemandados.component';
 
 
 
 @NgModule({
-  declarations: [DashboardComponent, ContenidoComponent, MenuComponent, HeaderComponent, SettingsComponent, ContratoComponent, FacturasComponent, MainComponent, FormContratoComponent, FormFacturasComponent, DriveComponent, UsuariosComponent, MensajesComponent, MandadosComponent, FormDriveComponent, FormUsuarioComponent, FormMensajesComponent, FormMandadosComponent, PerfilComponent, MandadosEmpresarialesComponent, OrdenDriversComponent],
+  entryComponents:[
+    FormDetallemandadosComponent
+  ],
+  declarations: [DashboardComponent, ContenidoComponent, MenuComponent, HeaderComponent, SettingsComponent, ContratoComponent, FacturasComponent, MainComponent, FormContratoComponent, FormFacturasComponent, DriveComponent, UsuariosComponent, MensajesComponent, MandadosComponent, FormDriveComponent, FormUsuarioComponent, FormMensajesComponent, FormMandadosComponent, PerfilComponent, MandadosEmpresarialesComponent, OrdenDriversComponent, FormDetallemandadosComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -43,6 +48,7 @@ import { OrdenDriversComponent } from './components/orden-drivers/orden-drivers.
     DashboardUserRoutingModule,
     NgxSpinnerModule,
     InfiniteScrollModule,
+    MyOwnCustomMaterialModule
   ],
   exports: [
     DashboardComponent

@@ -1,0 +1,54 @@
+<h2 mat-dialog-title>Install Angular</h2>
+<mat-dialog-content class="mat-typography">
+    <div class="row">
+        <div class="col-4">
+            <div class="row">
+                <div class="col-12">
+                    <img [src]="data.usuario.foto || './assets/imagenes/perfil.png'">
+                    <h5>{{ data.nombreCliente }}</h5>
+                </div>
+                <div class="col-12">
+                    <br>
+                    <ul class="list-group list-group-horizontal-xl">
+                        <li class="list-group-item">HORA</li>
+                        <li class="list-group-item">{{ data.createdAt }}</li>
+                    </ul>
+                    <ul class="list-group list-group-horizontal-xl">
+                        <li class="list-group-item">DIRECCION</li>
+                        <li class="list-group-item">{{ data.origentexto }}</li>
+                    </ul>
+                    <ul class="list-group list-group-horizontal-xl">
+                        <li class="list-group-item">NOMBRE</li>
+                        <li class="list-group-item">{{ data.nombreCliente }}</li>
+                    </ul>
+                    <ul class="list-group list-group-horizontal-xl">
+                        <li class="list-group-item">NUMERO</li>
+                        <li class="list-group-item">{{ data.numeroCliente }}</li>
+                    </ul>
+                    <ul class="list-group list-group-horizontal-xl">
+                        <li class="list-group-item">MONTO A COBRAR</li>
+                        <li class="list-group-item">{{ data.ofreceCliente }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="row">
+                <div class="col-12">
+                    <h5>SELECCIONE UN DRIVE</h5>
+                </div>
+                <div class="col-12">
+                    <ul class="list-group list-group-flush" *ngFor="let item of listDrivers">
+                        <li class="list-group-item">Cras justo odio</li>
+                    </ul>
+                </div>
+                <div class="col-12">
+                    <button mat-button color="primary">ASIGNAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Salir</button>
+</mat-dialog-actions>

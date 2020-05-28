@@ -1,7 +1,10 @@
 import {
   MatSliderModule,
   MatSidenavModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatTabsModule,
+  MatDialogModule,
+  MatButtonModule
 } from '@angular/material';
 import { NgModule } from '@angular/core';
 
@@ -10,11 +13,17 @@ import { NgModule } from '@angular/core';
     MatSliderModule,
     MatSidenavModule,
     MatSnackBarModule,
+    MatTabsModule,
+    MatDialogModule,
+    MatButtonModule
   ],
   exports: [
     MatSliderModule,
     MatSidenavModule,
     MatSnackBarModule,
+    MatTabsModule,
+    MatDialogModule,
+    MatButtonModule
   ],
 })
 export class MyOwnCustomMaterialModule { }

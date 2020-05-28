@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MandadosService } from 'src/app/services-components/mandados.service';
 import * as _ from 'lodash';
+import { ToolsService } from 'src/app/services/tools.service';
+import { FormDetallemandadosComponent } from '../../forms/form-detallemandados/form-detallemandados.component';
 @Component({
   selector: 'app-mandados-empresariales',
   templateUrl: './mandados-empresariales.component.html',
@@ -8,19 +10,8 @@ import * as _ from 'lodash';
 })
 export class MandadosEmpresarialesComponent implements OnInit {
 
-  listMandados:any = [
-    {
-      usuario:{
-        nombre: "jose"
-      },
-      mandados: [
-        {
-          origentexto: "tibu"
-        }
-      ]
-    }
-  ];
-  counts:any = [{},{},{},{},{},{}];
+  listMandados:any = [];
+  counts:any = [];
   querys:any = {
     where:{
       estado: 0,
@@ -31,7 +22,8 @@ export class MandadosEmpresarialesComponent implements OnInit {
   };
 
   constructor(
-    private _mandados: MandadosService
+    private _mandados: MandadosService,
+    private _tools: ToolsService
   ) { }
 
   ngOnInit() {
@@ -43,7 +35,7 @@ export class MandadosEmpresarialesComponent implements OnInit {
   }
 
   formato( res:any, count:number ){
-    // this.counts = count;
+    this.counts = res.data;
     let formato:any = [];
     for( let row of res ){
       let filtro:any = Object();
@@ -55,13 +47,19 @@ export class MandadosEmpresarialesComponent implements OnInit {
           mandados: [ { ...row } ]
         });
       }else{
-        let idx:any = _.indexOf( formato, [ 'id', filtro.id ]);
-        console.log("entre", formato, filtro.id, idx)
+        console.log("entre", formato, filtro.id)
+        let idx:any = _.findIndex( formato, [ 'id', filtro.id ]);
         if(idx >= 0) formato[idx].mandados.push( { ...row });
       }
     }
-    console.log(formato);
     this.listMandados = formato;
+  }
+
+  async openDialog( item:any ){
+    let dialog:any = await this._tools.openDialog(FormDetallemandadosComponent, item);
+    dialog.afterClosed().subscribe(result => {
+       console.log(`Dialog result: ${result}`);
+    });
   }
 
   codigo(){
