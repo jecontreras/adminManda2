@@ -35,7 +35,7 @@
                                                     </td>
                                                     <td class="text-center colorTr" *ngFor="let key of item.mandados"
                                                         (click)="openDialog(key, 'ver')">
-                                                        <span>{{ key.createdAt | date:'mm:ss' }}</span>
+                                                        <span>{{ key.horaEntrega | date:'hh:mm:ss' }}</span>
                                                         <br>
                                                         <span>{{ key.origentexto }}</span>
                                                     </td>

@@ -18,7 +18,7 @@
                 <div class="col-md-12 col-xs-12 col-sm-12">
                     <br>
                     <ul class="list-group list-group-horizontal-xl">
-                        <li class="list-group-item">HORA: {{ data.createdAt | date:'mm:ss' }} </li>
+                        <li class="list-group-item">HORA: {{ data.horaEntrega | date:'hh:mm:ss' }} </li>
                         <li class="list-group-item">DIRECCION: {{ data.origentexto }} </li>
                         <li class="list-group-item">NOMBRE: {{ data.nombreCliente }} </li>
                         <li class="list-group-item">NUMERO: {{ data.numeroCliente }} </li>
@@ -34,7 +34,7 @@
                         <h5>SELECCIONE UN DRIVE</h5>
                     </div>
                     <div class="col-md-12 col-xs-12 col-sm-12">
-                        <ul class="list-group">
+                        <ul class="list-group mouse">
                             <li *ngFor="let item of listDrivers" (click)="seleccionConductor( item )" [ngClass]="{cambiarColor: item.check == true}" class="list-group-item"> {{ item.nombre }} {{ item.apellido }} </li>
                         </ul>
                     </div>
@@ -45,7 +45,19 @@
             <div class="content">
                 <div class="row">
                     <br><br>
-                    <h1 class="text-center">
+                    <h1 class="text-center" *ngIf="data.estado == 0">
+                        <p class="text-dark">ESTADO</p>
+                        <p class="text-warning">ACTIVO</p>
+                    </h1>
+                    <h1 class="text-center" *ngIf="data.estado == 1">
+                        <p class="text-dark">ESTADO</p>
+                        <p class="text-warning">CANCELADO</p>
+                    </h1>
+                    <h1 class="text-center" *ngIf="data.estado == 2">
+                        <p class="text-dark">ESTADO</p>
+                        <p class="text-warning">COMPLETADO</p>
+                    </h1>
+                    <h1 class="text-center" *ngIf="data.estado == 3">
                         <p class="text-dark">ESTADO</p>
                         <p class="text-warning">EN PROCESO</p>
                     </h1>
