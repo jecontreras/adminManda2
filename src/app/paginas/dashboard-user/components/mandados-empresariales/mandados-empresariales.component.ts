@@ -52,7 +52,12 @@ export class MandadosEmpresarialesComponent implements OnInit {
     let formato: any = [];
     for (let row of res) {
       let filtro: any = Object();
-      if (Object.keys(formato).length > 0) { filtro = formato.find((item: any) => item.usuario.id == row.usuario.id); if (!formato) formato = {}; }
+      if (Object.keys(formato).length > 0) { 
+        filtro = formato.find((item: any) => item.usuario.id == row.usuario.id); 
+        if (!filtro) filtro = {}; 
+      }
+      console.log(filtro);
+      if(filtro == undefined) filtro = {}; 
       if (Object.keys(filtro).length == 0) {
         formato.push({
           id: this.codigo(),
@@ -78,7 +83,11 @@ export class MandadosEmpresarialesComponent implements OnInit {
     let formato:any = [];
     for( let row of res ){
       let filtro:any = Object();
-      if( Object.keys(formato).length > 0 ) { filtro = formato.find((item:any) => item.usuario.id == row.usuario.id ); if(!formato) formato = {}; }
+      if( Object.keys(formato).length > 0 ) { 
+        filtro = formato.find((item:any) => item.usuario.id == row.usuario.id ); 
+        if(!filtro) filtro = {}; 
+        if(filtro == undefined) filtro = {}; 
+      }
       if(Object.keys(filtro).length == 0 ) {
         formato.push({
           id: this.codigo(),

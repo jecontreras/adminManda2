@@ -43,7 +43,7 @@ export class OrdenDriversComponent implements OnInit {
     let formato:any = [];
     for( let row of res ){
       let filtro:any = Object();
-      if( Object.keys(formato).length > 0 ) { filtro = formato.find((item:any) => item.coductor.id == row.coductor.id ); if(!formato) formato = {}; }
+      if( Object.keys(formato).length > 0 ) { filtro = formato.find((item:any) => item.coductor.id == row.coductor.id ); if(!filtro) filtro = {}; }
       if(Object.keys(filtro).length == 0 ) {
         formato.push({
           id: this.codigo(),
