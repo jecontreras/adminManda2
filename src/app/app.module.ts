@@ -18,6 +18,7 @@ import { PaginasModule } from './paginas/paginas.module';
 
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { SocketIoModule } from 'ngx-socket-io';
 
 
 
@@ -33,6 +34,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode
     }),
+    SocketIoModule.forRoot( environment.socketConfig ),
     PaginasModule,
     BrowserAnimationsModule,
     MyOwnCustomMaterialModule,

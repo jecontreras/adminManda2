@@ -63,7 +63,7 @@
                   <td>{{row['cedula']}}</td>
                   <td>{{row['direccion']}}</td>
                   <td>{{row['createdAt']}}</td>
-                  <td><span *ngIf="row.estado == 0">Activo</span> <span *ngIf="row.estado == 1">Eliminado</span></td>
+                  <td><span *ngIf="row.conectado == true">ACTIVO</span> <span *ngIf="row.conectado == false">INACTIVO</span></td>
                 </tr>
               </tbody>
             </table>

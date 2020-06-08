@@ -3,6 +3,7 @@ import { MandadosService } from 'src/app/services-components/mandados.service';
 import * as _ from 'lodash';
 import { ToolsService } from 'src/app/services/tools.service';
 import { FormDetallemandadosComponent } from '../../forms/form-detallemandados/form-detallemandados.component';
+import { WebsocketService } from 'src/app/services/websocket.services';
 @Component({
   selector: 'app-mandados-empresariales',
   templateUrl: './mandados-empresariales.component.html',
@@ -33,15 +34,33 @@ export class MandadosEmpresarialesComponent implements OnInit {
     page: 0
   };
 
+  markersMapbox: any = {};
+
   constructor(
+    private wsServices: WebsocketService,
     private _mandados: MandadosService,
     private _tools: ToolsService
   ) { }
 
   ngOnInit() {
     this.getMandados();
-    this.getMandadosPactados();
+    this.escucharSockets();
   }
+
+  OpenSelect( ev:any ){
+    if( ev == 1) this.getMandadosPactados();
+  }
+
+  escucharSockets(){
+    this.wsServices.listen('orden-nuevo')
+    .subscribe((marcador: any)=> {
+      //console.log(marcador);
+      let formato: any = this.listMandados;
+      this.creacionDelFormato( formato, marcador );
+      this.listMandados = formato;
+    });
+  }
+
   /* mandados empresariales activos */
   getMandados() {
     this._mandados.get(this.querys).subscribe((res: any) => this.formato(res.data, res.count));
@@ -51,12 +70,18 @@ export class MandadosEmpresarialesComponent implements OnInit {
     this.counts = res.data;
     let formato: any = [];
     for (let row of res) {
-      let filtro: any = Object();
+      this.creacionDelFormato( formato, row );
+    }
+    this.listMandados = formato;
+  }
+
+  creacionDelFormato( formato:any, row:any ){
+    let filtro: any = Object();
       if (Object.keys(formato).length > 0) { 
         filtro = formato.find((item: any) => item.usuario.id == row.usuario.id); 
         if (!filtro) filtro = {}; 
       }
-      console.log(filtro);
+      //console.log(filtro);
       if(filtro == undefined) filtro = {}; 
       if (Object.keys(filtro).length == 0) {
         formato.push({
@@ -68,9 +93,8 @@ export class MandadosEmpresarialesComponent implements OnInit {
         let idx: any = _.findIndex(formato, ['id', filtro.id]);
         if (idx >= 0) formato[idx].mandados.push({ ...row });
       }
-    }
-    this.listMandados = formato;
   }
+
   /* mandados empresariales finis */
 
   /* mandados empresariales pactado */

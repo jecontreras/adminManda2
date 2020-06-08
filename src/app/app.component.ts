@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { WebsocketService } from './services/websocket.services';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit{
   title = 'Pagos Onlain';
+  constructor(
+    private wsServices: WebsocketService,
+  ){
 
+  }
   ngOnInit(): void {
     console.log("Buenas")
     // localStorage.setItem('config-fixed-header', 'fixed-header');

@@ -1,9 +1,13 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+import { SocketIoConfig } from 'ngx-socket-io';
+
+const config: SocketIoConfig = { url: 'https://socketsmanda2.herokuapp.com', options: {} };
 
 export const environment = {
   production: false,
+  socketConfig: config,
   // url: "http://localhost:1337"
   url: "https://backendmanda.herokuapp.com"
 };

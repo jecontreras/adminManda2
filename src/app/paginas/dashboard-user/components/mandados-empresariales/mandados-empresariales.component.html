@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="row">
-                <mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4">
+                <mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4" (selectedIndexChange)="OpenSelect($event)">
                     <mat-tab label="SIN ASIGNAR" class="example-small-box mat-elevation-z4">
                         <div class="row">
                             <div class="main-box clearfix">

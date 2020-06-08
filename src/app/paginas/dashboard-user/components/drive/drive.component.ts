@@ -4,6 +4,7 @@ import { ToolsService } from 'src/app/services/tools.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as _ from 'lodash';
 import { UsuariosService } from 'src/app/services-components/usuarios.service';
+import { WebsocketService } from 'src/app/services/websocket.services';
 
 declare interface DataTable {
   headerRow: string[];
@@ -38,7 +39,10 @@ export class DriveComponent implements OnInit {
   notEmptyPost:boolean = true;
   coint:number;
 
+  markersMapbox: any = {};
+
   constructor(
+    private wsServices: WebsocketService,
     private _usuarios: UsuariosService,
     private spinner: NgxSpinnerService,
     private Router: Router,
@@ -52,6 +56,51 @@ export class DriveComponent implements OnInit {
       dataRows: []
     };
     this.cargarTodos();
+    this.escucharSockets();
+  }
+
+  escucharSockets(){
+    // orden-nueva
+    this.wsServices.listen('marcador-nuevo')
+    .subscribe((marcador: any)=> {
+      if( !marcador ) return false;
+      if( this.markersMapbox[marcador.id]) this.markersMapbox[marcador.id] = marcador;
+      else this.markersMapbox[marcador.id] = marcador; 
+      // console.log(marcador, this.markersMapbox);
+      this.cambiarEstadoDrive();
+    });
+   
+    this.wsServices.listen('marcador-borrar')
+    .subscribe((marcador: any)=> {
+      // console.log(marcador);
+      if( !marcador ) return false;
+      if( this.markersMapbox[marcador] ) { this.markersMapbox[marcador].estado = false; this.cambiarEstadoDrive(); }
+      else {
+        let filtro = _.findIndex( this.dataTable.dataRows, [ 'idSockets', marcador ]);
+        if( !filtro ) return false;
+        this.dataTable.dataRows[filtro]['conectado'] = false;
+      }
+    });
+
+  }
+  /* Procedimiento de cambio de estado */
+
+  cambiarEstadoDrive(){
+    for( let row of this.dataTable.dataRows ){
+      let filtro:any =  this.encontrarDrive( row['id'] ); /*this.markersMapbox.find(( item:any )=> item.userID == row['id'] );*/
+      //console.log(filtro);
+      if(!filtro) continue;
+      row['conectado'] = filtro.estado;
+    }
+  }
+
+  encontrarDrive( ids:string ){
+    let respuesta:any = "";
+    for (let [id, marcador] of Object.entries(this.markersMapbox)) {
+      //console.log( id, marcador);
+      if( marcador['userID'] == ids ) { respuesta = marcador; return marcador;}
+    }
+    return respuesta;
   }
 
   crear(obj:any){

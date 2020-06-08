@@ -6,6 +6,7 @@ import { MandadosService } from 'src/app/services-components/mandados.service';
 import { ToolsService } from 'src/app/services/tools.service';
 import { OfertandoService } from 'src/app/services-components/ofertando.service';
 import { error } from 'protractor';
+import { WebsocketService } from 'src/app/services/websocket.services';
 
 @Component({
   selector: 'app-form-detallemandados',
@@ -19,6 +20,9 @@ export class FormDetallemandadosComponent implements OnInit {
   listSeleccionados:any = {};
   disabledSubmit:boolean = false;
   options:boolean = false;
+
+  markersMapbox: any = {};
+  query:any = { where: { estadoDisponible: true, conectado:true, estado: 0, rol: "conductor" }, limit: -1 }
   
   constructor(
     public dialogRef: MatDialogRef<FormDetallemandadosComponent>,
@@ -26,7 +30,8 @@ export class FormDetallemandadosComponent implements OnInit {
     private _user: UsuariosService,
     private _mandado: MandadosService,
     private _tools: ToolsService,
-    private _ofertando: OfertandoService
+    private _ofertando: OfertandoService,
+    private wsServices: WebsocketService,
   ) { }
 
   ngOnInit() {
@@ -36,10 +41,60 @@ export class FormDetallemandadosComponent implements OnInit {
       if( this.data.view == 'asignar') this.getDrivers();
       if( this.data.view == 'ver') this.procesoVer();
     }
+    this.escucharSockets();
+  }
+
+  escucharSockets(){
+    // orden-nueva
+    this.wsServices.listen('marcador-nuevo')
+    .subscribe((marcador: any)=> {
+      if( !marcador ) return false;
+      if( this.markersMapbox[marcador.id]) this.markersMapbox[marcador.id] = marcador;
+      else this.markersMapbox[marcador.id] = marcador; 
+      //console.log(marcador, this.markersMapbox);
+      let filtro:any = this.listDrivers.find(( row:any )=> row.id == marcador.userID);
+      //console.log("encontro", filtro)
+      if( !filtro ) this.listDrivers.push({
+        id: marcador.userID,
+        latitud: marcador.lat,
+        longitud: marcador.lng,
+        nombre: marcador.nombre,
+        apellido: ""
+      });
+      this.cambiarEstadoDrive();
+    });
+   
+    this.wsServices.listen('marcador-borrar')
+    .subscribe((marcador: any)=> {
+      //console.log(marcador);
+      if( !marcador ) return false;
+      if( this.markersMapbox[marcador] ) { this.markersMapbox[marcador].estado = false; this.cambiarEstadoDrive(); }
+      this.listDrivers = this.listDrivers.filter( ( row:any )=> row.idSockets !== marcador );
+    });
+
+  }
+  /* Procedimiento de cambio de estado */
+
+  cambiarEstadoDrive(){
+    for( let row of this.listDrivers ){
+      let filtro:any =  this.encontrarDrive( row['id'] ); /*this.markersMapbox.find(( item:any )=> item.userID == row['id'] );*/
+      //console.log(filtro);
+      if(!filtro) continue;
+      row['conectado'] = filtro.estado;
+    }
+  }
+
+  encontrarDrive( ids:string ){
+    let respuesta:any = "";
+    for (let [id, marcador] of Object.entries(this.markersMapbox)) {
+      //console.log( id, marcador);
+      if( marcador['userID'] == ids ) { respuesta = marcador; return marcador;}
+    }
+    return respuesta;
   }
 
   getDrivers(){
-    this._user.get({ where: {estadoDisponible: true, estado: 0, rol: "conductor" }, limit: -1 }).subscribe((res:any)=>{
+    this._user.get( this.query ).subscribe((res:any)=>{
       this.listDrivers = res.data;
     });
   }
@@ -61,6 +116,7 @@ export class FormDetallemandadosComponent implements OnInit {
     this._mandado.editar(data).subscribe((res:any)=> {
       this.disabledSubmit = false;
       this._tools.presentToast("Asignado el usuario");
+      this.wsServices.emit("orden-confirmada", res);
       this.dialogRef.close('asignado');
     },(error)=> { this.disabledSubmit = false; this._tools.presentToast("Error en el proceso") });
   }
