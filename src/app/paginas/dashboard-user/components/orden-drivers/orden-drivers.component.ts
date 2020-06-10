@@ -3,6 +3,7 @@ import { MandadosService } from 'src/app/services-components/mandados.service';
 import * as _ from 'lodash';
 import { ToolsService } from 'src/app/services/tools.service';
 import { FormDetallemandadosComponent } from '../../forms/form-detallemandados/form-detallemandados.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-orden-drivers',
@@ -15,7 +16,7 @@ export class OrdenDriversComponent implements OnInit {
   counts2: any = [];
   querys2: any = {
     where: {
-      estado: [2, 3],
+      estado: [2,3],
       tipoOrden: 1,
       coductor:{ '!': null }
     },
@@ -26,6 +27,7 @@ export class OrdenDriversComponent implements OnInit {
 
   constructor(
     private _mandados: MandadosService,
+    private spinner: NgxSpinnerService,
     private _tools: ToolsService
   ) { }
 
@@ -35,6 +37,7 @@ export class OrdenDriversComponent implements OnInit {
 
   /* mandados empresariales pactado */
   getMandadosPactados(){
+    this.spinner.show();
     this._mandados.get( this.querys2 ).subscribe(( res:any ) => this.formato2( res.data, res.count ) );
   }
 
@@ -56,6 +59,7 @@ export class OrdenDriversComponent implements OnInit {
       }
     }
     this.listMandados2 = formato;
+    this.spinner.hide();
   }
 /* mandados empresariales finis */
 

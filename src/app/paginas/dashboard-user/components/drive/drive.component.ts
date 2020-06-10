@@ -31,7 +31,7 @@ export class DriveComponent implements OnInit {
     sort: "createdAt DESC",
     page: 0
   };
-  Header:any = [ 'Acciones','Nombre','apellido','E-mail','Telefonos','Cedula', 'Direccion', 'Fecha Registro','Estado' ];
+  Header:any = [ 'Acciones','Nombre','apellido','E-mail','Telefonos','Cedula', 'Direccion', 'Fecha Registro','Estado', 'Estado Disponibilidad' ];
   $:any;
   public datoBusqueda = '';
 
@@ -80,6 +80,15 @@ export class DriveComponent implements OnInit {
         if( !filtro ) return false;
         this.dataTable.dataRows[filtro]['conectado'] = false;
       }
+    });
+
+    this.wsServices.listen('drive')
+    .subscribe((user: any)=> {
+      //console.log(user);
+      let filtro = _.findIndex( this.dataTable.dataRows, [ 'id', user.id ]);
+      //console.log(filtro, this.dataTable.dataRows)
+      if( !filtro ) return false;
+      this.dataTable.dataRows[filtro] = user;
     });
 
   }

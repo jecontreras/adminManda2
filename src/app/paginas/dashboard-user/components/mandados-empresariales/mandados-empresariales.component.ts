@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import { ToolsService } from 'src/app/services/tools.service';
 import { FormDetallemandadosComponent } from '../../forms/form-detallemandados/form-detallemandados.component';
 import { WebsocketService } from 'src/app/services/websocket.services';
+import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-mandados-empresariales',
   templateUrl: './mandados-empresariales.component.html',
@@ -33,13 +34,24 @@ export class MandadosEmpresarialesComponent implements OnInit {
     limit: -1,
     page: 0
   };
+  listMandados3: any = [];
+  querys3: any = {
+    where: {
+      estado: 2,
+      tipoOrden: 1
+    },
+    sort: "createdAt DESC",
+    limit: -1,
+    page: 0
+  };
 
   markersMapbox: any = {};
 
   constructor(
     private wsServices: WebsocketService,
     private _mandados: MandadosService,
-    private _tools: ToolsService
+    private _tools: ToolsService,
+    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit() {
@@ -47,22 +59,24 @@ export class MandadosEmpresarialesComponent implements OnInit {
     this.escucharSockets();
   }
 
-  OpenSelect( ev:any ){
-    if( ev == 1) this.getMandadosPactados();
+  OpenSelect(ev: any) {
+    if (ev == 1) this.getMandadosPactados();
+    if (ev == 2) this.getMandadosFinix();
   }
 
-  escucharSockets(){
+  escucharSockets() {
     this.wsServices.listen('orden-nuevo')
-    .subscribe((marcador: any)=> {
-      //console.log(marcador);
-      let formato: any = this.listMandados;
-      this.creacionDelFormato( formato, marcador );
-      this.listMandados = formato;
-    });
+      .subscribe((marcador: any) => {
+        //console.log(marcador);
+        let formato: any = this.listMandados;
+        this.creacionDelFormato(formato, marcador);
+        this.listMandados = formato;
+      });
   }
 
   /* mandados empresariales activos */
   getMandados() {
+    this.spinner.show();
     this._mandados.get(this.querys).subscribe((res: any) => this.formato(res.data, res.count));
   }
 
@@ -70,19 +84,50 @@ export class MandadosEmpresarialesComponent implements OnInit {
     this.counts = res.data;
     let formato: any = [];
     for (let row of res) {
-      this.creacionDelFormato( formato, row );
+      this.creacionDelFormato(formato, row);
     }
     this.listMandados = formato;
+    this.spinner.hide();
   }
 
-  creacionDelFormato( formato:any, row:any ){
+  creacionDelFormato(formato: any, row: any) {
     let filtro: any = Object();
-      if (Object.keys(formato).length > 0) { 
-        filtro = formato.find((item: any) => item.usuario.id == row.usuario.id); 
-        if (!filtro) filtro = {}; 
+    if (Object.keys(formato).length > 0) {
+      filtro = formato.find((item: any) => item.usuario.id == row.usuario.id);
+      if (!filtro) filtro = {};
+    }
+    //console.log(filtro);
+    if (filtro == undefined) filtro = {};
+    if (Object.keys(filtro).length == 0) {
+      formato.push({
+        id: this.codigo(),
+        usuario: row.usuario,
+        mandados: [{ ...row }]
+      });
+    } else {
+      let idx: any = _.findIndex(formato, ['id', filtro.id]);
+      if (idx >= 0) formato[idx].mandados.push({ ...row });
+    }
+  }
+
+  /* mandados empresariales finis */
+
+  /* mandados empresariales pactado */
+  getMandadosPactados() {
+    this.spinner.show();
+    this._mandados.get(this.querys2).subscribe((res: any) => this.formato2(res.data, res.count));
+  }
+
+  formato2(res: any, count: number) {
+    this.counts2 = res.data;
+    let formato: any = [];
+    for (let row of res) {
+      let filtro: any = Object();
+      if (Object.keys(formato).length > 0) {
+        filtro = formato.find((item: any) => item.usuario.id == row.usuario.id);
+        if (!filtro) filtro = {};
+        if (filtro == undefined) filtro = {};
       }
-      //console.log(filtro);
-      if(filtro == undefined) filtro = {}; 
       if (Object.keys(filtro).length == 0) {
         formato.push({
           id: this.codigo(),
@@ -90,45 +135,50 @@ export class MandadosEmpresarialesComponent implements OnInit {
           mandados: [{ ...row }]
         });
       } else {
+        console.log("entre", formato, filtro.id)
         let idx: any = _.findIndex(formato, ['id', filtro.id]);
         if (idx >= 0) formato[idx].mandados.push({ ...row });
       }
+    }
+    this.listMandados2 = formato;
+    this.spinner.hide();
   }
-
   /* mandados empresariales finis */
 
   /* mandados empresariales pactado */
-  getMandadosPactados(){
-    this._mandados.get( this.querys2 ).subscribe(( res:any ) => this.formato2( res.data, res.count ) );
+  getMandadosFinix() {
+    this.spinner.show();
+    this._mandados.get(this.querys3).subscribe((res: any) => this.formato3(res.data, res.count));
   }
 
-  formato2( res:any, count:number ){
+  formato3(res: any, count: number) {
     this.counts2 = res.data;
-    let formato:any = [];
-    for( let row of res ){
-      let filtro:any = Object();
-      if( Object.keys(formato).length > 0 ) { 
-        filtro = formato.find((item:any) => item.usuario.id == row.usuario.id ); 
-        if(!filtro) filtro = {}; 
-        if(filtro == undefined) filtro = {}; 
+    let formato: any = [];
+    for (let row of res) {
+      let filtro: any = Object();
+      if (Object.keys(formato).length > 0) {
+        filtro = formato.find((item: any) => item.usuario.id == row.usuario.id);
+        if (!filtro) filtro = {};
+        if (filtro == undefined) filtro = {};
       }
-      if(Object.keys(filtro).length == 0 ) {
+      if (Object.keys(filtro).length == 0) {
         formato.push({
           id: this.codigo(),
           usuario: row.usuario,
-          mandados: [ { ...row } ]
+          mandados: [{ ...row }]
         });
-      }else{
+      } else {
         console.log("entre", formato, filtro.id)
-        let idx:any = _.findIndex( formato, [ 'id', filtro.id ]);
-        if(idx >= 0) formato[idx].mandados.push( { ...row });
+        let idx: any = _.findIndex(formato, ['id', filtro.id]);
+        if (idx >= 0) formato[idx].mandados.push({ ...row });
       }
     }
-    this.listMandados2 = formato;
+    this.listMandados3 = formato;
+    this.spinner.hide();
   }
-/* mandados empresariales finis */
+  /* mandados empresariales finis */
 
-  async openDialog(item: any, opt:string) {
+  async openDialog(item: any, opt: string) {
     item.view = opt;
     let dialog: any = await this._tools.openDialog(FormDetallemandadosComponent, item, { height: "490px", width: "750px" });
     dialog.afterClosed().subscribe(result => {
