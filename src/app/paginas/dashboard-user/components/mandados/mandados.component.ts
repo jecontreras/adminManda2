@@ -25,6 +25,7 @@ export class MandadosComponent implements OnInit {
   query:any = {
     where:{
       //estado: 0
+      tipoOrden: 0
     },
     sort: "createdAt DESC",
     page: 0

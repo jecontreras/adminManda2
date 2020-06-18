@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import { ToolsService } from 'src/app/services/tools.service';
 import { FormDetallemandadosComponent } from '../../forms/form-detallemandados/form-detallemandados.component';
 import { NgxSpinnerService } from 'ngx-spinner';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-orden-drivers',
@@ -25,6 +26,9 @@ export class OrdenDriversComponent implements OnInit {
     page: 0
   };
 
+  filtro:any = {};
+  disableFiltro:boolean = false;
+
   constructor(
     private _mandados: MandadosService,
     private spinner: NgxSpinnerService,
@@ -32,6 +36,29 @@ export class OrdenDriversComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.borrarFiltro();
+  }
+
+  borrarFiltro(){
+    this.filtro = {
+      fecha2: moment().format("YYYY-MM-DD"),
+      fecha1: moment().add(-1, 'days').format("YYYY-MM-DD")
+    };
+    this.querys2= {
+      where: {
+        estado: [2,3],
+        tipoOrden: 1,
+        coductor:{ '!': null }
+      },
+      sort: "createdAt DESC",
+      limit: -1,
+      page: 0
+    };
+    this.querys2.where.createdAt = {
+      ">=": moment( this.filtro.fecha1 ),
+      "<=": moment( this.filtro.fecha2 )
+    };
+    console.log(this.querys2)
     this.getMandadosPactados();
   }
 
@@ -42,6 +69,7 @@ export class OrdenDriversComponent implements OnInit {
   }
 
   formato2( res:any, count:number ){
+    this.disableFiltro = false;
     this.counts2 = res.data;
     let formato:any = [];
     for( let row of res ){
@@ -73,6 +101,18 @@ export class OrdenDriversComponent implements OnInit {
 
   codigo() {
     return (Date.now().toString(20).substr(2, 3) + Math.random().toString(20).substr(2, 3)).toUpperCase();
+  }
+
+  buscarFiltro(){
+    var dateFormat = 'YYYY-MM-DD';
+    if( !( moment(moment( this.filtro.fecha1 ).format(dateFormat),dateFormat ).isValid() ) ) return false;
+    if( !( moment(moment( this.filtro.fecha2 ).format(dateFormat),dateFormat ).isValid() ) ) return false;
+    this.disableFiltro = true;
+    this.querys2.where.createdAt = {
+      ">=": moment( this.filtro.fecha1 ),
+      "<=": moment( this.filtro.fecha2 )
+    };
+    this.getMandadosPactados();
   }
 
 }

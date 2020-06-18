@@ -18,6 +18,27 @@
                 <mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4">
                     <mat-tab label="MANDADOS ASIGNADOS A CADA DRIVER">
                         <div class="row">
+                            <div class="form-group col-xs-6">
+                                <label for="maskedDate">Fecha empieza</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    <input type="date" class="form-control"
+                                        [(ngModel)]="filtro.fecha1">
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-6">
+                                <label for="maskedDate">Fecha Finaliza</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    <input type="date" class="form-control"
+                                        [(ngModel)]="filtro.fecha2">
+                                </div>
+                                <div>
+                                    <button type="button" class="btn btn-primary" [disabled]="disableFiltro" (click)="buscarFiltro()">Buscar</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="main-box clearfix">
                                 <div class="main-box-body clearfix">
                                     <div class="table-responsive">

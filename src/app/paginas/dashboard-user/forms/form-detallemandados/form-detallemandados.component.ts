@@ -22,7 +22,7 @@ export class FormDetallemandadosComponent implements OnInit {
   options:boolean = false;
 
   markersMapbox: any = {};
-  query:any = { where: { estadoDisponible: true, conectado:true, estado: 0, rol: "conductor" }, limit: -1 }
+  query:any = { where: { estadoDisponible: true, /*conectado:true,*/ estado: 0, rol: "conductor" }, limit: -1 }
   
   constructor(
     public dialogRef: MatDialogRef<FormDetallemandadosComponent>,
@@ -110,9 +110,12 @@ export class FormDetallemandadosComponent implements OnInit {
       idOfertando: ofertando.id,
       origenConductorlat: this.listSeleccionados.latitud,
       origenConductorlon: this.listSeleccionados.longitud,
-      ofreceConductor: this.data.ofreceCliente,
+      ofreceConductor: this.data.ofreceCliente || 0,
       estado: 3
     };
+    data = _.omitBy(data, _.isNull);
+    data = _.omitBy(data, _.isUndefined);
+    this.disabledSubmit = false;
     this._mandado.editar(data).subscribe((res:any)=> {
       this.disabledSubmit = false;
       this._tools.presentToast("Asignado el usuario");
@@ -126,9 +129,11 @@ export class FormDetallemandadosComponent implements OnInit {
       let data:any = {
         usuario: this.listSeleccionados.id,
         orden: this.data.id,
-        ofrece: this.data.ofreceCliente
+        ofrece: this.data.ofreceCliente || 0
       };
-       this._ofertando.saved(data).subscribe((res:any)=>resolve(res),(error)=>resolve(false));
+      data = _.omitBy(data, _.isNull);
+      data = _.omitBy(data, _.isUndefined);
+      this._ofertando.saved(data).subscribe((res:any)=>resolve(res),(error)=>resolve(false));
     });
   }
 
