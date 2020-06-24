@@ -67,6 +67,7 @@ export class FormDetallemandadosComponent implements OnInit {
         apellido: ""
       });
       this.cambiarEstadoDrive();
+      if( this.data.coductor ) this.listDrivers = this.listDrivers.filter( ( row:any )=> row.id !== this.data.coductor.id );
     });
    
     this.wsServices.listen('marcador-borrar')
@@ -101,6 +102,7 @@ export class FormDetallemandadosComponent implements OnInit {
   getDrivers(){
     this._user.get( this.query ).subscribe((res:any)=>{
       this.listDrivers = res.data;
+      if( this.data.coductor ) this.listDrivers = this.listDrivers.filter( ( row:any )=> row.id !== this.data.coductor.id );
     });
   }
 
@@ -120,9 +122,9 @@ export class FormDetallemandadosComponent implements OnInit {
     };
     data = _.omitBy(data, _.isNull);
     data = _.omitBy(data, _.isUndefined);
+    if( !this.data.coductor ) await this.procesoEditarContrato( data );
+    else await this.procesoCambiarConductor( data );
     this.disabledSubmit = false;
-    if( !this.data.coductor ) this.procesoEditarContrato( data );
-    else this.procesoCambiarConductor( data );
   }
 
   procesoEditarContrato( data:any ){
@@ -139,7 +141,12 @@ export class FormDetallemandadosComponent implements OnInit {
 
   procesoCambiarConductor( data:any ){
     return new Promise( resolve=>{
-      this._mandado.editar(data).subscribe((res:any)=> {
+      this._mandado.editar(data).subscribe( async ( res:any )=> {
+        let idChat:any;
+        try {
+          idChat = await this.procesoEliminarChat({ emisor: this.data.coductor.id, reseptor: this.data.usuario.id, ofertando: this.data.idOfertando.id, ordenes: this.data.id });
+        } catch (error) {}
+        res.idChat = idChat || false;
         this.wsServices.emit("orden-cancelada", res);
         setTimeout(()=>{
           this.disabledSubmit = false;
@@ -155,15 +162,14 @@ export class FormDetallemandadosComponent implements OnInit {
   procesoEliminarChat( data:any ){
     return new Promise( resolve=>{
       let filtro = {
-        where:{
-          or:[
-            { emisor: data.emisor },
-            { reseptor: data.respetor }
-          ]
-        }
+        emisor: data.emisor,
+        reseptor: data.reseptor,
+        text: "eliminado",
+        ofertando: data.ofertando,
+        ordenes: data.ordenes
       };
-      this._mensajes.delete( filtro ).subscribe((res:any)=>{
-        resolve( res );
+      this._mensajes.destruirChat( filtro ).subscribe((res:any)=>{
+        resolve( res.data );
       },(error:any)=> resolve( false ));
     });
   }

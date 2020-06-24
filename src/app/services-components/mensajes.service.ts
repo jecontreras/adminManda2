@@ -26,4 +26,7 @@ export class MensajesService {
   delete (query: any){
     return this._model.querys<MENSAJES>('chat/'+query.id, query, 'delete');
   }
+  destruirChat (query: any){
+    return this._model.querys<MENSAJES>('chat/borrarchat', query, 'post');
+  }
 }

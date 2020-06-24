@@ -8,7 +8,7 @@ const config: SocketIoConfig = { url: 'https://socketsmanda2.herokuapp.com', opt
 export const environment = {
   production: false,
   socketConfig: config,
-  // url: "http://localhost:1337"
+  //url: "http://localhost:1337"
   url: "https://backendmanda.herokuapp.com"
 };
 

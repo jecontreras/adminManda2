@@ -63,7 +63,7 @@
                         <p class="text-warning">EN PROCESO</p>
                     </h1>
                     <h1 class="text-center" *ngIf="data.estado == 2 || data.estado == 3">
-                        <p class="text-dark">{{ data.coductor.nombre }} {{ data.coductor.apellido }}</p>
+                        <p class="text-dark colorDark">Asignado {{ data.coductor.nombre }} {{ data.coductor.apellido }}</p>
                     </h1>
                     <h1 class="text-center" *ngIf="data.estado == 2 || data.estado == 3">
                         <p>Cambiar a</p>
@@ -79,5 +79,5 @@
     </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button (click)="AsignarConductor()" *ngIf="listSeleccionados.id">ASIGNAR</button>
+    <button mat-button (click)="AsignarConductor()" [disabled]="disabledSubmit" *ngIf="listSeleccionados.id">ASIGNAR</button>
 </mat-dialog-actions>
