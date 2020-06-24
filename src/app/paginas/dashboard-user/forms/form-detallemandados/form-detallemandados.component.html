@@ -11,7 +11,7 @@
                             <img class="fotoPerfil" [src]="data.usuario.foto || './assets/imagenes/perfil.png'">
                         </div>
                         <div class="col-md-8 col-xs-8 col-sm-8">
-                            <h2>{{ data.nombreCliente }}</h2>
+                            <h2>{{ data.usuario.nombre }} {{ data.usuario.apellido }}</h2>
                         </div>
                     </div>
                 </div>
@@ -23,6 +23,7 @@
                         <li class="list-group-item">NOMBRE: {{ data.nombreCliente }} </li>
                         <li class="list-group-item">NUMERO: {{ data.numeroCliente }} </li>
                         <li class="list-group-item">MONTO A COBRAR: {{ data.ofreceCliente }} </li>
+                        <li class="list-group-item">DATOS EXTRAS: {{ data.descripcion }} </li>
                     </ul>
                 </div>
             </div>
@@ -61,6 +62,17 @@
                         <p class="text-dark">ESTADO</p>
                         <p class="text-warning">EN PROCESO</p>
                     </h1>
+                    <h1 class="text-center" *ngIf="data.estado == 2 || data.estado == 3">
+                        <p class="text-dark">{{ data.coductor.nombre }} {{ data.coductor.apellido }}</p>
+                    </h1>
+                    <h1 class="text-center" *ngIf="data.estado == 2 || data.estado == 3">
+                        <p>Cambiar a</p>
+                    </h1>
+                    <div class="col-md-12 col-xs-12 col-sm-12" *ngIf="data.estado == 2 || data.estado == 3">
+                        <ul class="list-group mouse">
+                            <li *ngFor="let item of listDrivers" (click)="seleccionConductor( item )" [ngClass]="{cambiarColor: item.check == true}" class="list-group-item"> {{ item.nombre }} {{ item.apellido }} </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

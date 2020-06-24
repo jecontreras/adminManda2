@@ -7,6 +7,7 @@ import { ToolsService } from 'src/app/services/tools.service';
 import { OfertandoService } from 'src/app/services-components/ofertando.service';
 import { error } from 'protractor';
 import { WebsocketService } from 'src/app/services/websocket.services';
+import { MensajesService } from 'src/app/services-components/mensajes.service';
 
 @Component({
   selector: 'app-form-detallemandados',
@@ -32,14 +33,16 @@ export class FormDetallemandadosComponent implements OnInit {
     private _tools: ToolsService,
     private _ofertando: OfertandoService,
     private wsServices: WebsocketService,
+    private _mensajes: MensajesService
   ) { }
 
   ngOnInit() {
     if(Object.keys(this.datas.datos).length > 0) {
       this.data = _.clone(this.datas.datos);
       console.log( this.data );
-      if( this.data.view == 'asignar') this.getDrivers();
+      // if( this.data.view == 'asignar') this.getDrivers();
       if( this.data.view == 'ver') this.procesoVer();
+      this.getDrivers();
     }
     this.escucharSockets();
   }
@@ -49,6 +52,8 @@ export class FormDetallemandadosComponent implements OnInit {
     this.wsServices.listen('marcador-nuevo')
     .subscribe((marcador: any)=> {
       if( !marcador ) return false;
+      //console.log( marcador );
+      if( marcador.rol != "conductor") return false;
       if( this.markersMapbox[marcador.id]) this.markersMapbox[marcador.id] = marcador;
       else this.markersMapbox[marcador.id] = marcador; 
       //console.log(marcador, this.markersMapbox);
@@ -116,12 +121,51 @@ export class FormDetallemandadosComponent implements OnInit {
     data = _.omitBy(data, _.isNull);
     data = _.omitBy(data, _.isUndefined);
     this.disabledSubmit = false;
-    this._mandado.editar(data).subscribe((res:any)=> {
-      this.disabledSubmit = false;
-      this._tools.presentToast("Asignado el usuario");
-      this.wsServices.emit("orden-confirmada", res);
-      this.dialogRef.close('asignado');
-    },(error)=> { this.disabledSubmit = false; this._tools.presentToast("Error en el proceso") });
+    if( !this.data.coductor ) this.procesoEditarContrato( data );
+    else this.procesoCambiarConductor( data );
+  }
+
+  procesoEditarContrato( data:any ){
+    return new Promise( resolve=>{
+      this._mandado.editar(data).subscribe((res:any)=> {
+        this.disabledSubmit = false;
+        this._tools.presentToast("Asignado el usuario");
+        this.wsServices.emit("orden-confirmada", res);
+        this.dialogRef.close('asignado');
+        resolve( res );
+      },(error)=> { this.disabledSubmit = false; this._tools.presentToast("Error en el proceso"); resolve(false) });
+    });
+  }
+
+  procesoCambiarConductor( data:any ){
+    return new Promise( resolve=>{
+      this._mandado.editar(data).subscribe((res:any)=> {
+        this.wsServices.emit("orden-cancelada", res);
+        setTimeout(()=>{
+          this.disabledSubmit = false;
+          this._tools.presentToast("Asignado el usuario");
+          this.wsServices.emit("orden-confirmada", res);
+          this.dialogRef.close('cambiado');
+        }, 3000);
+        resolve( res );
+      },(error)=> { this.disabledSubmit = false; this._tools.presentToast("Error en el proceso"); resolve(false) });
+    })
+  }
+
+  procesoEliminarChat( data:any ){
+    return new Promise( resolve=>{
+      let filtro = {
+        where:{
+          or:[
+            { emisor: data.emisor },
+            { reseptor: data.respetor }
+          ]
+        }
+      };
+      this._mensajes.delete( filtro ).subscribe((res:any)=>{
+        resolve( res );
+      },(error:any)=> resolve( false ));
+    });
   }
 
   crearOfertando(){

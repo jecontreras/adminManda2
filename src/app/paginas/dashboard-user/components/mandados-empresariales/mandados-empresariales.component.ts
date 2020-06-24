@@ -135,7 +135,7 @@ export class MandadosEmpresarialesComponent implements OnInit {
           mandados: [{ ...row }]
         });
       } else {
-        console.log("entre", formato, filtro.id)
+        //console.log("entre", formato, filtro.id)
         let idx: any = _.findIndex(formato, ['id', filtro.id]);
         if (idx >= 0) formato[idx].mandados.push({ ...row });
       }
@@ -168,7 +168,7 @@ export class MandadosEmpresarialesComponent implements OnInit {
           mandados: [{ ...row }]
         });
       } else {
-        console.log("entre", formato, filtro.id)
+        //console.log("entre", formato, filtro.id)
         let idx: any = _.findIndex(formato, ['id', filtro.id]);
         if (idx >= 0) formato[idx].mandados.push({ ...row });
       }
@@ -180,10 +180,11 @@ export class MandadosEmpresarialesComponent implements OnInit {
 
   async openDialog(item: any, opt: string) {
     item.view = opt;
-    let dialog: any = await this._tools.openDialog(FormDetallemandadosComponent, item, { height: "490px", width: "750px" });
+    let dialog: any = await this._tools.openDialog(FormDetallemandadosComponent, item, { height: "694px", width: "750px" });
     dialog.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      //console.log(`Dialog result: ${result}`);
       if (result == 'asignado') this.getMandados();
+      if (result == 'cambiado') this.getMandadosPactados();
     });
   }
 

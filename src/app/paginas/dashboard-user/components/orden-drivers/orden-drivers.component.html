@@ -55,7 +55,7 @@
                                                         {{ item['coductor']?.nombre }} {{ item['coductor']?.apellido }}
                                                     </td>
                                                     <td class="text-center colorTr" *ngFor="let key of item.mandados"
-                                                        (click)="openDialog(key, 'ver')">
+                                                        (click)="openDialog(key, 'ver')" [ngClass]="{colorCompletado: key.estado == 2}">
                                                         <span>{{ key.horaEntrega | date:'hh:mm:ss' }}</span>
                                                         <br>
                                                         <span>{{ key.origentexto }}</span>

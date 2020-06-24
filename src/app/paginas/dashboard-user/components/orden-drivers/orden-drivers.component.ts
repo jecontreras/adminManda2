@@ -93,7 +93,7 @@ export class OrdenDriversComponent implements OnInit {
 
   async openDialog(item: any, opt:string) {
     item.view = opt;
-    let dialog: any = await this._tools.openDialog(FormDetallemandadosComponent, item, { height: "490px", width: "750px" });
+    let dialog: any = await this._tools.openDialog(FormDetallemandadosComponent, item, { height: "694px", width: "750px" });
     dialog.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
