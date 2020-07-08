@@ -32,6 +32,7 @@ import { MandadosEmpresarialesComponent } from './components/mandados-empresaria
 import { OrdenDriversComponent } from './components/orden-drivers/orden-drivers.component';
 import { MyOwnCustomMaterialModule } from 'src/app/app.material.module';
 import { FormDetallemandadosComponent } from './forms/form-detallemandados/form-detallemandados.component';
+import { AdministracionComponent } from './components/administracion/administracion.component';
 
 
 
@@ -39,7 +40,7 @@ import { FormDetallemandadosComponent } from './forms/form-detallemandados/form-
   entryComponents:[
     FormDetallemandadosComponent
   ],
-  declarations: [DashboardComponent, ContenidoComponent, MenuComponent, HeaderComponent, SettingsComponent, ContratoComponent, FacturasComponent, MainComponent, FormContratoComponent, FormFacturasComponent, DriveComponent, UsuariosComponent, MensajesComponent, MandadosComponent, FormDriveComponent, FormUsuarioComponent, FormMensajesComponent, FormMandadosComponent, PerfilComponent, MandadosEmpresarialesComponent, OrdenDriversComponent, FormDetallemandadosComponent],
+  declarations: [DashboardComponent, ContenidoComponent, MenuComponent, HeaderComponent, SettingsComponent, ContratoComponent, FacturasComponent, MainComponent, FormContratoComponent, FormFacturasComponent, DriveComponent, UsuariosComponent, MensajesComponent, MandadosComponent, FormDriveComponent, FormUsuarioComponent, FormMensajesComponent, FormMandadosComponent, PerfilComponent, MandadosEmpresarialesComponent, OrdenDriversComponent, FormDetallemandadosComponent, AdministracionComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,

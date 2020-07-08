@@ -40,6 +40,12 @@
       "name": "Orden Drivers",
       "redirectTo": "./ordenDrivers",
       "submenu":[]
+    },
+    {
+      "icon": "assignment_turned_in",
+      "name": "Administracion",
+      "redirectTo": "./administracion",
+      "submenu":[]
     }
   ]
   

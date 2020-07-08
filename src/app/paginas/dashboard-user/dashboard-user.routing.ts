@@ -19,6 +19,7 @@ import { FormMandadosComponent } from './forms/form-mandados/form-mandados.compo
 import { PerfilComponent } from './relleno/perfil/perfil.component';
 import { MandadosEmpresarialesComponent } from './components/mandados-empresariales/mandados-empresariales.component';
 import { OrdenDriversComponent } from './components/orden-drivers/orden-drivers.component';
+import { AdministracionComponent } from './components/administracion/administracion.component';
 
 const routes: Routes = [
     {
@@ -102,6 +103,10 @@ const routes: Routes = [
           {
             path: 'perfil',
             component: PerfilComponent
+          },
+          {
+            path: "administracion",
+            component: AdministracionComponent
           },
           {path: '**', redirectTo: 'home', pathMatch: 'full'}
         ]
