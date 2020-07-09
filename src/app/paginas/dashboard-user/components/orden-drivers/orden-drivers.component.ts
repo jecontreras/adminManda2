@@ -21,7 +21,10 @@ export class OrdenDriversComponent implements OnInit {
       tipoOrden: 1,
       coductor:{ '!': null }
     },
-    sort: "fechaEntrega DESC",
+    sort: [
+      { fechaEntrega: "ASC" },
+      { horaEntrega: "ASC"}
+    ],
     limit: -1,
     page: 0
   };
@@ -41,8 +44,8 @@ export class OrdenDriversComponent implements OnInit {
 
   borrarFiltro(){
     this.filtro = {
-      fecha2: moment().format("YYYY-MM-DD"),
-      fecha1: moment().add(-1, 'days').format("YYYY-MM-DD")
+      fecha2: moment().hours(0).minutes(0).seconds(0),
+      fecha1: moment().add(-1, 'days').hours(0).minutes(0).seconds(0)
     };
     this.querys2= {
       where: {
@@ -50,7 +53,10 @@ export class OrdenDriversComponent implements OnInit {
         tipoOrden: 1,
         coductor:{ '!': null }
       },
-      sort: "fechaEntrega DESC",
+      sort: [
+        { fechaEntrega: "DESC" },
+        { horaEntrega: "DESC"}
+      ],
       limit: -1,
       page: 0
     };
