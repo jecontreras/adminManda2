@@ -16,6 +16,9 @@
             </div>
             <div class="row">
                 <div class="col-12">
+                    <ngx-spinner bdOpacity=0.9 bdColor="" size="default" color="#581f87" type="ball-pulse-sync"
+                        [fullScreen]="false">
+                    </ngx-spinner>
                     <div class="row">
                         <div class="p-3 mb-2 text-white fondoRojo col-12 col-sm-12 row"
                             [ngClass]="{colorFondo: data.disponible, fondoRojo: data.disponible == false}">
@@ -35,11 +38,13 @@
                 <div class="col-12 col-sm-12">
                     <div class="form-group">
                         <label for="exampleInputName2">MENSAJE 1</label>
-                        <input type="text" class="form-control" [(ngModel)]="data.mensaje1">
+                        <textarea class="form-control" id="exampleTextarea" rows="3"
+                            [(ngModel)]="data.mensaje1"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputEmail2">MENSAJE 2</label>
-                        <input type="text" class="form-control" [(ngModel)]="data.mensaje2">
+                        <textarea class="form-control" id="exampleTextarea" rows="3"
+                            [(ngModel)]="data.mensaje2"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputEmail2">BLOQUEO</label>

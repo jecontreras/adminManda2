@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AppService } from 'src/app/services-components/app.service';
 import { ToolsService } from 'src/app/services/tools.service';
 import { WebsocketService } from 'src/app/services/websocket.services';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-administracion',
@@ -15,7 +16,8 @@ export class AdministracionComponent implements OnInit {
   constructor(
     private _app: AppService,
     private _tools: ToolsService,
-    private wsServices: WebsocketService
+    private wsServices: WebsocketService,
+    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit() {
@@ -23,8 +25,10 @@ export class AdministracionComponent implements OnInit {
   }
 
   getCargandoApp(){
+    this.spinner.show();
     this._app.get( { where: { vercion:"1.0" } }).subscribe(( res:any )=> {
       // console.log( res );
+      this.spinner.hide();
       this.data = res.data[0] || {};
     });
   }

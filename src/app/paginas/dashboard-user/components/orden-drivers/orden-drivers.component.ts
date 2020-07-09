@@ -21,7 +21,7 @@ export class OrdenDriversComponent implements OnInit {
       tipoOrden: 1,
       coductor:{ '!': null }
     },
-    sort: "createdAt DESC",
+    sort: "fechaEntrega DESC",
     limit: -1,
     page: 0
   };
@@ -50,7 +50,7 @@ export class OrdenDriversComponent implements OnInit {
         tipoOrden: 1,
         coductor:{ '!': null }
       },
-      sort: "createdAt DESC",
+      sort: "fechaEntrega DESC",
       limit: -1,
       page: 0
     };

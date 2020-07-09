@@ -19,7 +19,7 @@ export class MandadosEmpresarialesComponent implements OnInit {
       estado: 0,
       tipoOrden: 1
     },
-    sort: "createdAt DESC",
+    sort: "fechaEntrega DESC",
     limit: -1,
     page: 0
   };
@@ -30,7 +30,7 @@ export class MandadosEmpresarialesComponent implements OnInit {
       estado: 3,
       tipoOrden: 1
     },
-    sort: "createdAt DESC",
+    sort: "fechaEntrega DESC",
     limit: -1,
     page: 0
   };
@@ -40,7 +40,7 @@ export class MandadosEmpresarialesComponent implements OnInit {
       estado: 2,
       tipoOrden: 1
     },
-    sort: "createdAt DESC",
+    sort: "fechaEntrega DESC",
     limit: -1,
     page: 0
   };
