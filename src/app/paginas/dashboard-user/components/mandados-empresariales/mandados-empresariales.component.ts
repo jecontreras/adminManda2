@@ -74,7 +74,18 @@ export class MandadosEmpresarialesComponent implements OnInit {
         let formato: any = this.listMandados;
         this.creacionDelFormato(formato, marcador);
         this.listMandados = formato;
-      });
+    });
+
+    this.wsServices.listen('orden-cancelada')
+    .subscribe((orden: any) => {
+      if( !orden ) return false;
+      this.procesoCancelado( orden );
+    });
+  }
+
+  procesoCancelado( ordenr:any ){
+    for( let row of this.listMandados ) row.mandados = row.mandados.filter( item => item.id !== ordenr.id );
+    this._tools.presentToast( "Mandado Eliminado ");
   }
 
   /* mandados empresariales activos */
@@ -91,6 +102,7 @@ export class MandadosEmpresarialesComponent implements OnInit {
     }
     this.listMandados = formato;
     this.spinner.hide();
+    console.log( this.listMandados );
   }
 
   creacionDelFormato(formato: any, row: any) {

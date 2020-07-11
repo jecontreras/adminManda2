@@ -8,6 +8,7 @@ import { OfertandoService } from 'src/app/services-components/ofertando.service'
 import { error } from 'protractor';
 import { WebsocketService } from 'src/app/services/websocket.services';
 import { MensajesService } from 'src/app/services-components/mensajes.service';
+import { resolve } from 'url';
 
 @Component({
   selector: 'app-form-detallemandados',
@@ -108,6 +109,8 @@ export class FormDetallemandadosComponent implements OnInit {
 
   async AsignarConductor(){
     if( Object.keys( this.listSeleccionados ).length == 0 ) return false;
+    let validador = await this.procesoValidandoMandado();
+    if( !validador ) return this._tools.presentToast( "No se puede asignar este mandado empresarial" );
     this.disabledSubmit = true;
     let ofertando:any = await this.crearOfertando();
     if( !ofertando ) { this.disabledSubmit = false; return this._tools.presentToast("Error en el Proceso por favor vuelva a intentar");}
@@ -125,6 +128,17 @@ export class FormDetallemandadosComponent implements OnInit {
     if( !this.data.coductor ) await this.procesoEditarContrato( data );
     else await this.procesoCambiarConductor( data );
     this.disabledSubmit = false;
+  }
+
+  procesoValidandoMandado(){
+    return new Promise( resolve =>{
+      this._mandado.get( { where: { id: this.data.id, estado: [ 0, 3 ] }, limit: 1 })
+      .subscribe(( res:any )=> {
+        res = res.data[0];
+        if( !res ) return resolve( false );
+        resolve( true );
+      },( error:any ) => resolve( false ) );
+    });
   }
 
   procesoEditarContrato( data:any ){
