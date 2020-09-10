@@ -120,7 +120,7 @@ export class FormDetallemandadosComponent implements OnInit {
       idOfertando: ofertando.id,
       origenConductorlat: this.listSeleccionados.latitud,
       origenConductorlon: this.listSeleccionados.longitud,
-      ofreceConductor: this.data.ofreceCliente || 0,
+      // ofreceConductor: this.data.ofreceCliente || 0,
       estado: 3
     };
     data = _.omitBy(data, _.isNull);
